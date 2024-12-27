@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.itmentor.spring.boot_security.demo.model.Role;
 import ru.itmentor.spring.boot_security.demo.model.User;
 import ru.itmentor.spring.boot_security.demo.repository.UserRepository;
 import ru.itmentor.spring.boot_security.demo.security.PersonDetails;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class MyUserDetailsServise implements UserDetailsService {
 
     private final UserRepository userRepository;
@@ -52,7 +55,12 @@ public class MyUserDetailsServise implements UserDetailsService {
     }
 
     public void delete(int id) {
-        userRepository.deleteById(id);
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            System.out.println("Пользователь с ID " + id + " был удален.");
+        } else {
+            System.out.println("Пользователь с ID " + id + " не найден.");
+        }
     }
 
     public Optional<User> getUserById(int id) {
@@ -62,7 +70,5 @@ public class MyUserDetailsServise implements UserDetailsService {
     public Optional<User> getUserByUsername(String userName) {
         return userRepository.findByUsername(userName);
     }
-
-
 
 }

@@ -6,25 +6,25 @@ import org.springframework.security.core.userdetails.UserDetails;
 import ru.itmentor.spring.boot_security.demo.model.User;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.stream.Collectors;
 
 public class PersonDetails implements UserDetails {
-private final User user;
+    private final User user;
 
-public PersonDetails(User user) {
-    this.user = user;
-}
-
+    public PersonDetails(User user) {
+        this.user = user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return this.user.getPassword();
+        return this.user.getPassword(); // Return the password hash!
     }
 
     @Override
@@ -34,25 +34,25 @@ public PersonDetails(User user) {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return true; // Implement appropriate logic based on your needs
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return true; // Implement appropriate logic based on your needs
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return true; // Implement appropriate logic based on your needs
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return true; // Implement appropriate logic based on your needs
     }
 
     public User getUser() {
-    return this.user;
+        return this.user;
     }
 }

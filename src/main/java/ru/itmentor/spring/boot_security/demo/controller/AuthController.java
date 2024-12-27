@@ -1,29 +1,29 @@
 package ru.itmentor.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.model.User;
-import ru.itmentor.spring.boot_security.demo.servise.PersServ;
+
 import ru.itmentor.spring.boot_security.demo.servise.PersonServise;
 
 import java.util.Optional;
-
 
 @Controller
 public class AuthController {
 
     private final PersonServise personServise;
 
-
     @Autowired
     public AuthController(PersonServise personServise) {
         this.personServise = personServise;
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin")
     public String indexOfAllModel(Model model) {
         model.addAttribute("allPeople", personServise.upindex());
@@ -45,9 +45,8 @@ public class AuthController {
         return "/new";
     }
 
-
     @PostMapping()
-    public String create(@ModelAttribute("personCreated")  User user, BindingResult bindingResult) {
+    public String create(@ModelAttribute("personCreated") User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "/new";
         }
@@ -62,7 +61,7 @@ public class AuthController {
     }
 
     @PostMapping("/{id}")
-    public String update(@ModelAttribute("personEdit")  User user, BindingResult bindingResult,
+    public String update(@ModelAttribute("personEdit") User user, BindingResult bindingResult,
                          @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) {
             return "/edit";
@@ -77,7 +76,6 @@ public class AuthController {
         personServise.delete(id);
         return "redirect:/admin";
     }
-
 
     @GetMapping("/login")
     public String showLoginPage() {

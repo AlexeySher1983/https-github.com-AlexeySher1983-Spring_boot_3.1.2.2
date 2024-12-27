@@ -1,21 +1,22 @@
 package ru.itmentor.spring.boot_security.demo.model;
 
-//import lombok.*;
+import lombok.*;
 
 import javax.persistence.*;
 
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builder
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
     @Column(name = "username")
@@ -27,57 +28,75 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id")
+    )
+ private Set<Role> roles = new HashSet<>();
 
-    public User() {
-    }
 
-    public User(int id,String username, String sex, String password, String role) {
-        this.id = id;
-        this.username = username;
-        this.sex = sex;
-        this.password= password;
-        this.role = role;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
+//    public User() {
+//    }
+//    public User(int id, String username, String sex, String password, Set<Role> roles) {
+//
+//        this.id = id;
+//        this.username = username;
+//        this.sex = sex;
+//        this.password = password;
+//        this.roles = roles;
+//    }
+//
+//
+//    // Геттер для id
+//    public int getId() {
+//        return id;
+//    }
+//
+//    // Сеттер для id
+//    public void setId(int id) {
+//        this.id = id;
+//    }
+//
+//    // Геттер для username
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    // Сеттер для username
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//    // Геттер для sex
+//    public String getSex() {
+//        return sex;
+//    }
+//
+//    // Сеттер для sex
+//    public void setSex(String sex) {
+//        this.sex = sex;
+//    }
+//
+//    // Геттер для password
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    // Сеттер для password
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
+//
+//    // Геттер для roles
+//    public Set<Role> getRoles() {
+//        return roles;
+//    }
+//
+//    // Сеттер для roles
+//    public void setRoles(Set<Role> roles) {
+//        this.roles = roles;
+//    }
 }
+

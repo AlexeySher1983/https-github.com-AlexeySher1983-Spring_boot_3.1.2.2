@@ -5,16 +5,17 @@
     <title>Somebody</title>
 </head>
 <body>
-
-<p th:text="${showPerson.getId()}">VALUE</p>
-<p th:text="${showPerson.getUsername()}">VALUE</p>
-<p th:text="${showPerson.getSex()}">VALUE</p>
-<p th:text="${showPerson.getPassword()}">VALUE</p>
-
-<a th:href="@{/{id}/edit(id=${showPerson.getId()})}">Edit</a>
-<form th:method="DELETE" th:action="@{/{id}(id=${showPerson.getId()})}">
-    <input type="submit" value="Delete!"/>
-</form>
-
+<div th:if="${showPerson != null}">
+    <p th:text="${showPerson.getId()}">VALUE</p>
+    <p th:text="${showPerson.getUsername()}">VALUE</p>
+    <p th:text="${showPerson.getSex()}">VALUE</p>
+    <p th:text="${showPerson.getPassword()}">VALUE</p>
+    <a th:href="@{/{id}/edit(id=${showPerson.getId()})}">Edit</a>
+    <form th:method="DELETE" th:action="@{/{id}(id=${showPerson.getId()})}">
+        <input type="submit" value="Delete!"/>
+    </form>
+</div>
+<div th:if="${showPerson == null}">
+    <p>Пользователь не найден.</p>
+</div>
 </body>
-</html>
